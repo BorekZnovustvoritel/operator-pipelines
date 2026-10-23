@@ -49,6 +49,12 @@
         pipeline_name: operator-release-pipeline
       ansible.builtin.import_tasks: tasks/check_pipeline_run.yml
 
+    - name: Verify the pipeline created and uploaded an oversized LFS catalog
+      ansible.builtin.include_tasks: tasks/check_generated_lfs_catalog.yml
+      when: integration_tests_fbc_lfs_fixture_image | length > 0
+      tags:
+        - test-generated-lfs-catalog
+
     - name: Verify the Bundle was released to image indices
       vars:
         registry_access_token: "{{ stage_operator_pipelines_test_service_account_access_token }}"

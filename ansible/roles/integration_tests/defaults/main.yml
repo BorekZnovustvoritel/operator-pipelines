@@ -9,6 +9,8 @@ integration_tests_git_base_branch: main
 integration_tests_operator_bundle_version: 0.0.1
 
 integration_tests_fbc_lfs: false
+# Digest-pinned synthetic bundle image; nonempty only for generated-catalog tests.
+integration_tests_fbc_lfs_fixture_image: ""
 integration_tests_fbc_lfs_push: false
 integration_tests_fbc_lfs_target_size: 100000001
 integration_tests_fbc_lfs_run_id: ""

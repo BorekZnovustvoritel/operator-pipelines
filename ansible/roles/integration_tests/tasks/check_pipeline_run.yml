@@ -13,7 +13,7 @@
           - "suffix={{ suffix }}"
       register: integration_tests_pipeline_run
       until: integration_tests_pipeline_run.resources | length > 0
-      retries: 10
+      retries: 20
       delay: 5
       failed_when: integration_tests_pipeline_run.resources | length == 0
 

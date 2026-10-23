@@ -48,6 +48,12 @@
     chdir: "{{ integration_tests_git_temp_dir.path }}"
   changed_when: true
 
+- name: Prepare template for pipeline-generated LFS catalog
+  ansible.builtin.include_tasks: tasks/prepare_lfs_template.yml
+  when: integration_tests_fbc_lfs_fixture_image | length > 0
+  tags:
+    - prepare-bundle
+
 - name: Generate and push Operator Bundle
   tags:
     - prepare-bundle
@@ -83,6 +89,11 @@
 
     git checkout "origin/$SRC_OPERATOR_BRANCH" -- "operators/$SRC_OPERATOR_PACKAGE_NAME"
 
+    if [[ -n "{{ integration_tests_fbc_lfs_fixture_image }}" ]]; then
+      # Keep the fixture template already committed on the base branch.
+      rm -rf "operators/$SRC_OPERATOR_PACKAGE_NAME/catalog-templates"
+    fi
+
     mv operators/$SRC_OPERATOR_PACKAGE_NAME/* "operators/$OPERATOR_PACKAGE_NAME"
 
     pushd "operators/$OPERATOR_PACKAGE_NAME"
@@ -114,6 +125,11 @@
           "$CATALOG_TEMPLATE" > "$RELEASE_CONFIG_PATH"
         echo "Generated test bundle release configuration: $RELEASE_CONFIG_PATH"
       fi
+    fi
+
+    if [[ -n "{{ integration_tests_fbc_lfs_fixture_image }}" ]]; then
+      printf 'catalog_templates:\n  - template_name: basic.yaml\n    channels:\n      - stable\n    replaces: %s.v0.0.0\n' \
+        "$OPERATOR_PACKAGE_NAME" > "$DEST_VERSION/release-config.yaml"
     fi
 
     diff -bur "$SRC_VERSION/" "$DEST_VERSION/" || true

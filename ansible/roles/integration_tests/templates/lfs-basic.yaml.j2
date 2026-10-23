@@ -1,0 +1,13 @@
+---
+schema: olm.template.basic
+entries:
+  - schema: olm.package
+    name: {{ integration_tests_operator_package_name }}
+    defaultChannel: stable
+  - schema: olm.channel
+    name: stable
+    package: {{ integration_tests_operator_package_name }}
+    entries:
+      - name: {{ integration_tests_operator_package_name }}.v0.0.0
+  - schema: olm.bundle
+    image: {{ integration_tests_fbc_lfs_fixture_image | to_json }}

@@ -1,0 +1,52 @@
+---
+- name: Find the pipeline-generated catalog PR
+  ansible.builtin.uri:
+    url: >-
+      https://api.github.com/repos/{{ integration_tests_git_upstream_repo }}/pulls?state=all&base={{ integration_tests_git_upstream_branch | urlencode }}&per_page=100
+    headers:
+      Authorization: "token {{ ci_pipeline_github_personal_access_token }}"
+      Accept: application/vnd.github.v3+json
+  register: integration_tests_catalog_prs
+  no_log: true
+
+- name: Select the generated PR for this bundle
+  ansible.builtin.set_fact:
+    integration_tests_generated_catalog_prs: >-
+      {{ integration_tests_catalog_prs.json | selectattr('title', 'equalto',
+         'Auto FBC release ' ~ integration_tests_operator_package_name ~ ' ' ~ integration_tests_operator_bundle_version) | list }}
+
+- name: Require exactly one generated catalog PR
+  ansible.builtin.assert:
+    that:
+      - integration_tests_generated_catalog_prs | length == 1
+
+- name: Create an independent checkout for LFS verification
+  ansible.builtin.tempfile:
+    state: directory
+  register: integration_tests_lfs_verification_dir
+
+- name: Verify the committed pointer and download the generated LFS object
+  ansible.builtin.shell: |
+    set -euo pipefail
+    export GIT_LFS_SKIP_SMUDGE=1
+    git clone --single-branch --branch "$GENERATED_BRANCH" "$REPO_URL" repo
+    cd repo
+    test "$(git check-attr filter -- "$CATALOG")" = "$CATALOG: filter: lfs"
+    git show "HEAD:$CATALOG" > ../pointer
+    git lfs pointer --check --file=../pointer
+    EXPECTED_SIZE=$(sed -n 's/^size //p' ../pointer)
+    EXPECTED_SHA=$(sed -n 's/^oid sha256://p' ../pointer)
+    test "$EXPECTED_SIZE" -ge 100000000
+    unset GIT_LFS_SKIP_SMUDGE
+    git lfs pull --include="$CATALOG" --exclude=""
+    test "$(wc -c < "$CATALOG")" -eq "$EXPECTED_SIZE"
+    printf '%s  %s\n' "$EXPECTED_SHA" "$CATALOG" | sha256sum --check
+    echo "Verified pipeline-generated LFS catalog: $EXPECTED_SIZE bytes"
+  environment:
+    GENERATED_BRANCH: "{{ integration_tests_generated_catalog_prs[0].head.ref }}"
+    REPO_URL: "{{ integration_tests_git_repo_url }}"
+    CATALOG: "catalogs/{{ integration_tests_catalog_versions }}/{{ integration_tests_operator_package_name }}/catalog.yaml"
+  args:
+    executable: /bin/bash
+    chdir: "{{ integration_tests_lfs_verification_dir.path }}"
+  changed_when: false

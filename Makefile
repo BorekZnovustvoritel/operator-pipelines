@@ -12,8 +12,8 @@ OPERATOR_VERSION_RELEASE ?= 1-1
 OPERATOR_VERSION ?= 0.1.$(OPERATOR_VERSION_RELEASE)
 INTEGRATION_TESTS_FBC_LFS ?= false
 INTEGRATION_TESTS_FBC_LFS_RUN_ID ?= $(shell date +%s%N)
-# Optional namespace suffix used to isolate parallel LFS tests.
-INTEGRATION_TESTS_FBC_NAMESPACE_SUFFIX ?=
+# Published synthetic bundle from local-dev/create-lfs-bundle-fixture.py.
+INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE ?=
 
 
 .PHONY: configure-stage-cluster
@@ -88,8 +88,7 @@ build-and-test-isv-fbc-lfs:
 	$(MAKE) integration-test-isv-fbc-lfs \
 		TAG=$(TAG) \
 		INTEGRATION_TESTS_FBC_LFS=true \
-		INTEGRATION_TESTS_FBC_LFS_RUN_ID=$(INTEGRATION_TESTS_FBC_LFS_RUN_ID) \
-		INTEGRATION_TESTS_FBC_NAMESPACE_SUFFIX=-lfs-$(INTEGRATION_TESTS_FBC_LFS_RUN_ID)
+		INTEGRATION_TESTS_FBC_LFS_RUN_ID=$(INTEGRATION_TESTS_FBC_LFS_RUN_ID)
 
 .PHONY: build-and-test-isv-fbc-lfs-push
 build-and-test-isv-fbc-lfs-push:
@@ -109,6 +108,27 @@ build:
 	@echo "Tagging..."
 	podman tag pipelines $(PIPELINE_IMAGE_REPO):$(TAG)
 	podman push $(PIPELINE_IMAGE_REPO):$(TAG)
+
+.PHONY: build-and-test-community-fbc-lfs
+build-and-test-community-fbc-lfs:
+	@test -n "$(INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE)" || (echo "Set INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE to the fixture image digest"; exit 1)
+	$(MAKE) build
+	$(MAKE) integration-test-community-fbc-lfs TAG=$(TAG)
+
+.PHONY: integration-test-community-fbc-lfs
+integration-test-community-fbc-lfs:
+	@test -n "$(INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE)" || (echo "Set INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE to the fixture image digest"; exit 1)
+	ansible-playbook \
+		ansible/playbooks/operator-pipeline-integration-tests.yml \
+		-e test_type=community-fbc-lfs \
+		-e integration_tests_fbc_lfs_fixture_image=$(INTEGRATION_TESTS_FBC_LFS_FIXTURE_IMAGE) \
+		-e oc_namespace=$(USER)-comm-fbc-lfs-test-$(OPERATOR_VERSION_RELEASE) \
+		-e integration_tests_operator_bundle_version=$(OPERATOR_VERSION) \
+		-e operator_pipeline_image_pull_spec=$(PIPELINE_IMAGE) \
+		-e suffix=8c6beec \
+		--skip-tags=signing-pipeline,import-index-images \
+		-vv \
+		--vault-password-file ansible/vault-password
 
 .PHONY: integration-test-isv
 integration-test-isv:
@@ -173,7 +193,7 @@ integration-test-isv-fbc-lfs:
 		-e test_type=isv-fbc-lfs \
 		-e integration_tests_fbc_lfs=$(INTEGRATION_TESTS_FBC_LFS) \
 		-e integration_tests_fbc_lfs_run_id=$(INTEGRATION_TESTS_FBC_LFS_RUN_ID) \
-		-e oc_namespace=$(USER)-fbc-catalog-test-$(OPERATOR_VERSION_RELEASE)$(INTEGRATION_TESTS_FBC_NAMESPACE_SUFFIX) \
+		-e oc_namespace=$(USER)-fbc-lfs-test-$(OPERATOR_VERSION_RELEASE) \
 		-e integration_tests_operator_bundle_version=$(OPERATOR_VERSION) \
 		-e operator_pipeline_image_pull_spec=$(PIPELINE_IMAGE) \
 		-e suffix=8c6beec \
@@ -190,7 +210,7 @@ integration-test-isv-fbc-lfs-push:
 		-e integration_tests_fbc_lfs=$(INTEGRATION_TESTS_FBC_LFS) \
 		-e integration_tests_fbc_lfs_push=$(INTEGRATION_TESTS_FBC_LFS_PUSH) \
 		-e integration_tests_fbc_lfs_run_id=$(INTEGRATION_TESTS_FBC_LFS_RUN_ID) \
-		-e oc_namespace=$(USER)-fbc-catalog-lfs-push-test-$(OPERATOR_VERSION_RELEASE)-$(INTEGRATION_TESTS_FBC_LFS_RUN_ID) \
+		-e oc_namespace=$(USER)-fbc-lfs-push-test-$(OPERATOR_VERSION_RELEASE) \
 		-e integration_tests_operator_bundle_version=$(OPERATOR_VERSION) \
 		-e operator_pipeline_image_pull_spec=$(PIPELINE_IMAGE) \
 		-e suffix=8c6beec \

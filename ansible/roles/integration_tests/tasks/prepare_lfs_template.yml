@@ -1,0 +1,26 @@
+---
+- name: Create catalog template directory
+  ansible.builtin.file:
+    path: "{{ integration_tests_git_temp_dir.path }}/operators/{{ integration_tests_operator_package_name }}/catalog-templates"
+    state: directory
+    mode: "0755"
+
+- name: Seed a compact template referencing the oversized fixture image
+  ansible.builtin.template:
+    src: lfs-basic.yaml.j2
+    dest: "{{ integration_tests_git_temp_dir.path }}/operators/{{ integration_tests_operator_package_name }}/catalog-templates/basic.yaml"
+    mode: "0644"
+
+- name: Publish template on base branch without pre-tracking the output in LFS
+  ansible.builtin.shell: |
+    set -euo pipefail
+    CATALOG="catalogs/{{ integration_tests_catalog_versions }}/{{ integration_tests_operator_package_name }}/catalog.yaml"
+    test ! -e "$CATALOG"
+    test "$(git check-attr filter -- "$CATALOG")" = "$CATALOG: filter: unspecified"
+    git add "operators/{{ integration_tests_operator_package_name }}/catalog-templates/basic.yaml"
+    git commit -m "Seed compact template for pipeline-generated LFS catalog"
+    git push origin "{{ integration_tests_git_upstream_branch }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ integration_tests_git_temp_dir.path }}"
+  changed_when: true
