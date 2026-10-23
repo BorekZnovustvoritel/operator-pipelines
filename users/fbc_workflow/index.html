@@ -1,0 +1,1559 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../fbc_onboarding/">
+      
+      
+        <link rel="next" href="../fbc_autorelease/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>File based catalog workflow - Red Hat OpenShift Operators</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#fbc-workflow" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Red Hat OpenShift Operators" class="md-header__button md-logo" aria-label="Red Hat OpenShift Operators" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Red Hat OpenShift Operators
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              File based catalog workflow
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/redhat-openshift-ecosystem/operator-pipelines" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    operator-pipelines
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Overview
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../pipelines_overview/" class="md-tabs__link">
+          
+  
+  
+  Operator pipelines
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../static_checks/" class="md-tabs__link">
+          
+  
+  
+  Tests
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../contributing-prerequisites/" class="md-tabs__link">
+          
+  
+  
+  Operators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../pipeline-admin-guide/" class="md-tabs__link">
+          
+  
+  
+  Admin
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Red Hat OpenShift Operators" class="md-nav__button md-logo" aria-label="Red Hat OpenShift Operators" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Red Hat OpenShift Operators
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/redhat-openshift-ecosystem/operator-pipelines" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    operator-pipelines
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operator pipelines
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operator pipelines
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pipelines_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../isv_pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ISV operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing-via-pr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing via PR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operator-ci-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operator CI yaml
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community-operators-troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting for Community Operators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workflow_exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow Exceptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tests
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tests
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../static_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Static checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic_checks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operators
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operators
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing-prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Before submitting your Operator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing-where-to/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where to place operator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Best practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbc_onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File based catalog onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File based catalog workflow
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File based catalog workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fbc-operator-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FBC operator config
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fbc-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FBC templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FBC templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fbc-template-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FBC template mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate-catalogs-using-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generate catalogs using templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generate catalogs using templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-new-bundle-to-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding new bundle to Catalog
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Adding new bundle to Catalog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SemVer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#basic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updating-existing-catalogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Updating existing catalogs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fbc_autorelease/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File based catalog auto-release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packaging-required-criteria-ocp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OKD/OpenShift Catalogs criteria and options
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Admin
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pipeline-admin-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../catalog_image_browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Catalog image browser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../fbc-catalog-promotion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FBC catalog promotion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../local-dev-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local development environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="fbc-workflow">FBC workflow</h1>
+<p>If you already have an existing non-FBC operator please continue with the <a href="../fbc_onboarding/">onboarding</a> documentation to convert it to FBC. Once you have converted your operator, or you want to introduce a brand new operator, you can start with the FBC workflow.</p>
+<h3 id="fbc-operator-config">FBC operator config</h3>
+<p>To indicate the operator is using fbc workflow an operator owner needs to indicate this
+fact in the <code>ci.yaml</code> file.</p>
+<p>Example of the <code>ci.yaml</code> with FBC config:</p>
+<pre><code class="language-yaml">---
+fbc:
+  enabled: true
+</code></pre>
+<h2 id="fbc-templates">FBC templates</h2>
+<p>File-based catalog templates serve as a simplified view of a catalog that can be updated
+by the user. The OPM currently supports 2 types of templates and it is up to the user which
+template the operator will be using.</p>
+<ul>
+<li>Basic template - <code>olm.template.basic</code></li>
+<li>SemVer template - <code>olm.semver</code></li>
+</ul>
+<p>More information about each template can be found at <a href="https://olm.operatorframework.io/docs/reference/catalog-templates/">opm doc</a>.</p>
+<p>The recommended template from the maintainability point of view is <code>SemVer</code>.</p>
+<h3 id="fbc-template-mapping">FBC template mapping</h3>
+<p>To be able to generate a catalog from templates a user needs to provide a mapping between
+template and catalog. The mapping is stored in the <code>ci.yaml</code> file. Based on your preference
+you can map a template to a catalog version with 1:N mapping or 1:1 mapping.</p>
+<p>Here is an example of the <code>ci.yaml</code> file with single template rendering multiple catalogs (<code>1:N</code>):</p>
+<pre><code class="language-yaml">---
+fbc:
+  enabled: true
+  catalog_mapping:
+    - template_name: my-custom-semver-template.yaml # The name of the file inside ./catalog-templates directory
+      catalogs_names: # a list of catalogs within the /catalogs directory
+        - &quot;v4.15&quot;
+        - &quot;v4.16&quot;
+        - &quot;v4.17&quot;
+      type: olm.semver
+    - template_name: my-custom-basic-template.yaml # The name of the file inside catalog-templates directory
+      catalogs_names:
+        - &quot;v4.12&quot;
+        - &quot;v4.13&quot;
+      type: olm.template.basic
+</code></pre>
+<p>And here is an example of the <code>ci.yaml</code> file with a single template rendering a single catalog (<code>1:1</code>):</p>
+<pre><code class="language-yaml">---
+fbc:
+  enabled: true
+  catalog_mapping:
+  - template_name: v4.14.yaml
+    catalog_names: [&quot;v4.14&quot;]
+    type: olm.template.basic
+  - template_name: v4.15.yaml
+    catalog_names: [&quot;v4.15&quot;]
+    type: olm.template.basic
+  - template_name: v4.16.yaml
+    catalog_names: [&quot;v4.16&quot;]
+    type: olm.template.basic
+  - template_name: v4.17.yaml
+    catalog_names: [&quot;v4.17&quot;]
+    type: olm.template.basic
+</code></pre>
+<h2 id="generate-catalogs-using-templates">Generate catalogs using templates</h2>
+<p>To generate a final catalog for an operator a user needs to execute different <code>opm</code>
+commands based on the template type. We as operator pipeline maintainers want
+to simplify this process and we prepared a <code>Makefile</code> with all pre-configured targets.</p>
+<p>To get the <code>Makefile</code> follow these steps (In case you converted the existing operator and
+followed the <a href="../fbc_onboarding/">onboarding</a> guide the <code>Makefile</code> should be already in
+your operator directory and you can skip the step.)</p>
+<pre><code class="language-bash">cd &lt;operator-repo&gt;/operator/&lt;operator-name&gt;
+wget https://raw.githubusercontent.com/redhat-openshift-ecosystem/operator-pipelines/main/fbc/Makefile
+</code></pre>
+<p>The right place for the Makefile is in the operator's root directory</p>
+<pre><code>.
+├── 0.0.1
+|   ├── release-config.yaml
+│   ├── manifests
+│   └── metadata
+├── catalog-templates
+├── ci.yaml
+└── Makefile
+
+</code></pre>
+<blockquote>
+<p>[!IMPORTANT]
+In case an operator isn't shipped to all OCP catalog versions manually update <code>OCP_VERSIONS</code>
+variable in the <code>Makefile</code> and include only versions supported by an operator.</p>
+</blockquote>
+<p>The command uses the <code>opm</code> and converts templates into catalogs. The generated catalogs
+can be submitted as a PR in Github and once the PR is processed changes will be released to the
+OCP index.</p>
+<pre><code class="language-bash">$ tree (repository-root)/catalogs
+catalogs
+├── v4.12
+│   └── aqua
+│       └── catalog.yaml
+├── v4.13
+│   └── aqua
+│       └── catalog.yaml
+├── v4.14
+│   └── aqua
+│       └── catalog.yaml
+├── v4.15
+│   └── aqua
+│       └── catalog.yaml
+└── v4.16
+    └── aqua
+        └── catalog.yaml
+
+</code></pre>
+<h3 id="adding-new-bundle-to-catalog">Adding new bundle to Catalog</h3>
+<p>A new bundle can be added automatically to your templates and catalogs if you use
+the automated release feature. The process is described in the
+<a href="../fbc_autorelease/">fbc auto-release</a> documentation.</p>
+<p>It is <strong>highly recommended to use the automated release feature</strong> as it simplifies the process
+from the user perspective.</p>
+<p>However if you want to manually add a new bundle to the catalog follow the steps below.</p>
+<p>To add a bundle to the catalog you need to first submit the new version of the operator
+using traditional <a href="../contributing-via-pr/">PR workflow</a>. The operator pipeline builds,
+tests, and releases the bundle into the registry. <strong>At this point, the operator is not available
+in the catalog yet.</strong> To add the bundle to the catalog you need to update catalog templates
+and add a bundle pullspec given by pull request comment and open a new pull request with catalog
+changes.</p>
+<p><img alt="Release info" src="../../img/release-info.png" /></p>
+<blockquote>
+<p>[!NOTE]
+Currently a workflow requires a 2-step process to release a new bundle into the catalog. In the first step, the operator bundle is released and in the second step, the catalog is updated with the new bundle.
+We are working on a solution to automate this process and make it a single step. However, this will require a usage of <code>SemVer</code> catalog template. In case you would like to use this feature once available please consider using <code>SemVer</code> template.</p>
+</blockquote>
+<h4 id="semver">SemVer</h4>
+<p>For example if I want to add <code>v1.1.0</code> bundle into <code>Fast</code> channel of a specific catalog I'll
+add it as mentioned in the example below:</p>
+<pre><code class="language-yaml">---
+Schema: olm.semver
+GenerateMajorChannels: true
+GenerateMinorChannels: true
+Candidate:
+  Bundles:
+  - Image: quay.io/foo/olm:testoperator.v0.1.0
+  - Image: quay.io/foo/olm:testoperator.v0.1.1
+  - Image: quay.io/foo/olm:testoperator.v0.1.2
+  - Image: quay.io/foo/olm:testoperator.v0.1.3
+  - Image: quay.io/foo/olm:testoperator.v0.2.0
+  - Image: quay.io/foo/olm:testoperator.v0.2.1
+  - Image: quay.io/foo/olm:testoperator.v0.2.2
+  - Image: quay.io/foo/olm:testoperator.v0.3.0
+  - Image: quay.io/foo/olm:testoperator.v1.0.0
+  - Image: quay.io/foo/olm:testoperator.v1.0.1
+  - Image: quay.io/foo/olm:testoperator.v1.1.0
+Fast:
+  Bundles:
+  - Image: quay.io/foo/olm:testoperator.v0.2.1
+  - Image: quay.io/foo/olm:testoperator.v0.2.2
+  - Image: quay.io/foo/olm:testoperator.v0.3.0
+  - Image: quay.io/foo/olm:testoperator.v1.0.0
+  - Image: quay.io/foo/olm:testoperator.v1.1.0 # &lt;-- Add new bundle into fast channel
+Stable:
+  Bundles:
+  - Image: quay.io/foo/olm:testoperator.v1.0.0
+</code></pre>
+<p>Also see <a href="https://olm.operatorframework.io/docs/advanced-tasks/catalog-update-formulary/#semver">opm doc</a>
+for automate-able step.</p>
+<h4 id="basic">Basic</h4>
+<p>For example, if I want to add <code>v0.2.0</code> bundle into <code>stable</code> channel of specific catalog I'll
+add it as mentioned in the example below.</p>
+<ol>
+<li>Add a new <code>olm.bundle</code> entry with bundle pullspec</li>
+<li>Add bundle into the <code>stable</code> channel</li>
+</ol>
+<pre><code class="language-yaml">---
+schema: olm.template.basic
+entries:
+  - schema: olm.package
+    name: example-operator
+    defaultChannel: stable
+
+  - schema: olm.channel
+    package: example-operator
+    name: stable
+    entries:
+      - name: example-operator.v0.1.0
+      - name: example-operator.v0.2.0 # &lt;-- Add bundle into channel
+        replaces: example-operator.v0.1.0
+
+  - schema: olm.bundle
+    image: docker.io/example/example-operator-bundle:0.1.0
+
+  - schema: olm.bundle # &lt;-- Add new bundle entry
+    image: docker.io/example-operator-bundle:0.2.0
+</code></pre>
+<p>Also see <a href="https://olm.operatorframework.io/docs/advanced-tasks/catalog-update-formulary/#fbc">opm doc</a>
+for automate-able step.</p>
+<h3 id="updating-existing-catalogs">Updating existing catalogs</h3>
+<p>A great benefit of FBC is that users can update operator update graphs independently
+of operator releases. This allows any post-release modification of the catalogs.
+If you want to change the order of updates, remove an invalid bundle, or do any other modification
+you are free to do that.</p>
+<p>After updating catalog templates don't forget to run <code>make catalogs</code> to generate a catalog
+from templates and submit the resulting catalog using PR workflow.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
